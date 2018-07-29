@@ -551,6 +551,45 @@ class ScalarFunctionsTest extends ScalarTypesTestBase {
   }
 
   @Test
+  def testRegexpReplace(): Unit = {
+    testAllApis(
+      "foobar".regexpReplace("oo|ar", "abc"),
+      "'foobar'.regexpReplace('oo|ar', 'abc')",
+      "regexp_replace('foobar', 'oo|ar', 'abc')",
+      "fabcbabc")
+
+    testAllApis(
+      "fooor".regexpReplace("oo", ""),
+      "'fooor'.regexpReplace('oo', '')",
+      "REGEXP_REPLACE('fooor', 'oo', '')",
+      "for")
+
+    testAllApis(
+      "fooor".regexpReplace("123", ""),
+      "'fooor'.regexpReplace('123', '')",
+      "REGEXP_REPLACE('fooor', '123', '')",
+      "fooor")
+
+    testAllApis(
+      'f33.regexpReplace("oo|ar", ""),
+      "f33.regexpReplace('oo|ar', '')",
+      "REGEXP_REPLACE(f33, 'oo|ar', '')",
+      "null")
+
+    testAllApis(
+      "foobar".regexpReplace('f33, ""),
+      "'foobar'.regexpReplace(f33, '')",
+      "REGEXP_REPLACE('foobar', f33, '')",
+      "null")
+
+    testAllApis(
+      "foobar".regexpReplace("oo|ar", 'f33),
+      "'foobar'.regexpReplace('oo|ar', f33)",
+      "REGEXP_REPLACE('foobar', 'oo|ar', f33)",
+      "null")
+  }
+
+  @Test
   def testFromBase64(): Unit = {
     testAllApis(
       'f35.fromBase64(),
